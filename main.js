@@ -33,6 +33,15 @@ function createWindow () {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow)
+// Quit when all windows are closed.
+app.on('before-quit', function () {
+  // On OS X it is common for applications and their menu bar
+  // to stay active until the user quits explicitly with Cmd + Q
+  if (process.platform !== 'darwin') {
+    mainWindow.webContents.send('quit')
+  }
+})
+
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -40,6 +49,9 @@ app.on('window-all-closed', function () {
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
     app.quit()
+  }else {
+    mainWindow.hide()
+
   }
 })
 
@@ -48,6 +60,8 @@ app.on('activate', function () {
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
     createWindow()
+  } else {
+    mainWindow.show()
   }
 })
 
